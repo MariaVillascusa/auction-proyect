@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="css/index-styles.css">
+  <title>SUBASTAS WEB</title>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-dark bg-dark" id='navbar'>
+    <div class="container-fluid">
+      <a class="navbar-brand">SUBASTAS WEB</a>
+      <form class="d-flex">
+        <input class="form-control me-2" id="search" type="search" placeholder="Buscar" aria-label="Search">
+        <button class="bttn" id="search-btn" type="submit">Buscar</button>
+      </form>
+    </div>
+  </nav>
+
+  <nav class="nav justify-content-center bg-dark" id="nav">
+    <a class="nav-link" id="link" href="index.html">Inicio</a>
+    <a class="nav-link" id="link" href="#">Categorías</a>
+    <a class="nav-link" id="link" href="#">Más visitados</a>
+    <a class="nav-link" id="link" href="#">Vender</a>
+    <a class="nav-link" id="link" href="#">Sobre nosotros</a>
+  </nav>
+  <div class="alert alert-danger d-none" role="alert" id="alert"></div>
+
+  <div id="confirm" class="modal">
+    <span onclick="document.getElementById('confirm').style.display='none'" class="close"
+      title="Close Modal">&times;</span>
+    <form class="modal-content" action="#">
+      <div class="container">
+        <h1>Hacer puja</h1>
+        <p>Estás seguro de que quieres pujar por el artículo?</p>
+
+        <div class="clearfix">
+          <button type="button" class="bttn cancelbtn" id="cancelbtn">Cancelar</button>
+          <button type="button" class="bttn confirmbtn" id="confirmbtn">Pujar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="container-xxl" id="container">
+
+
+
+
+
+
+  </div>
+      <!-- Bootstrap Bundle with Popper -->
+  <script src="bootstrap/js/bootstrap.min.js"></script>
+  <script type="module" src="js/index.js"></script>
+  <script type="module" src="js/articles.js"></script>
+
+</body>

@@ -1,0 +1,16 @@
+
+
+
+#card {
+    width: 18rem;
+    height: 21rem;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    float: left;
+    margin: 1rem;
+}
+
+.card-img-top{
+    padding: 5px;
+    border-radius:10px;
+}
