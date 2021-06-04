@@ -53,10 +53,11 @@ h6 {
   padding-top: 1rem;
 }
 
-img {
+#img {
   padding: 4rem;
-  width: 50%;
+  width: 80%;
   text-align: center;
+  border-radius: 7px ;
 }
 
 #div-img,
@@ -96,14 +97,6 @@ div {
 
 #td {
   background-color: transparent;
-}
-
-#nav {
-  border-top: 2px solid #f5f5f7;
-}
-
-#navbar {
-  padding: 1rem;
 }
 
 #b-time {

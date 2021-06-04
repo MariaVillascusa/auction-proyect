@@ -8,7 +8,7 @@
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="css/index-styles.css">
+  <link rel="stylesheet" href="css/register.css">
   <title>SUBASTAS WEB</title>
 </head>
 
@@ -30,7 +30,7 @@
     <a class="nav-link" id="link" href="#">Sobre nosotros</a>
     <a class="nav-link" id="link" href="register.html">Regístrate</a>
     <a class="nav-link" id="link" href="#">Log in</a>
-    
+
   </nav>
   <div class="alert alert-danger d-none" role="alert" id="alert"></div>
 
@@ -51,17 +51,35 @@
   </div>
 
   <div class="container-xxl" id="container">
+    <h1>Crear una cuenta</h1>
+    <div class="row g-3 align-items-center" id="register">
+      <form id="form" action="http://localhost:9900/users" method="POST">
 
+        <div class="mb-3">
+          <label for="name" class="form-label">Nombre completo</label>
+          <input type="text" class="form-control" id="name" name="name">
+        </div>
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input type="text" class="form-control" id="username" name="username">
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email address</label>
+          <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp">
+          <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" name="password">
+        </div>
 
-
-
-
-
+        <button type="button" class="btn bttn" id="btn">Enviar</button>
+      </form>
+    </div>
   </div>
-      <!-- Bootstrap Bundle with Popper -->
+
+  <!-- Bootstrap Bundle with Popper -->
   <script src="bootstrap/js/bootstrap.min.js"></script>
-  <script type="module" src="js/chrono.js"></script>
-  <script type="module" src="js/index.js"></script>
-  <script type="module" src="js/articles.js"></script>
+  <script type="module" src="js/register.js"></script>
 
 </body>

@@ -1,16 +1,77 @@
 
+body{
+    background: #F5F5F7;
+}
+  
+  #loading {
+    font-size: 1.5rem;
+    padding: 1rem;
+  }
+  
+  .bttn,
+  #bid-btn {
+    border: none;
+    background: #9a90cd;
+    color: white;
+    height: 2.2rem;
+    width: 5rem;
+    border-radius: 1.5rem;
+    cursor: pointer;
+    margin: 0.5rem;
+  }
+  
+  .bttn:hover,
+  #bid-btn:hover {
+    background: #a8a0ce;
+  }
+  
+  
+  
+  #link {
+    color: white;
+  }
+  
+  #buttons {
+    padding: 0.5rem;
+    text-align: center;
+  }
+
+  #search-btn {
+    background-color: #ffca28;
+  }
+
+  #search {
+    border-radius: 10px 10px;
+    color: black;
+    width: 10rem;
+    height: 2rem;
+    margin-right: 1rem;
+    margin-top: 0.55rem;
+  }
 
 
 #card {
+    background: white;
+    /* border:2px solid #202529 !important; */
+    border: none !important;
+    color: #212529;
     width: 18rem;
-    height: 21rem;
+    height: 24rem;
     border: 1px solid #ccc;
     border-radius: 7px;
     float: left;
     margin: 1rem;
+    margin-top: 3rem !important;
+    box-shadow: 5px 5px 10px 2px rgba(100, 100, 100, 0.26);
 }
 
 .card-img-top{
-    padding: 5px;
-    border-radius:10px;
+   
+    border-top-left-radius:10px;
+    border-top-right-radius:10px;
+
+}
+
+.price{
+    display: inline;
 }

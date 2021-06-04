@@ -1,15 +1,6 @@
-import * as articles from './articles.js';
-import * as bids from './bids.js';
-
-const DATE = new Date("05/21/2021 0:01 AM");
-const DAYS = document.getElementById("days");
-const HOURS = document.getElementById("hours");
-const MINUTES = document.getElementById("minutes");
-const SECONDS = document.getElementById("seconds");
-const MILLISECONDS_OF_A_SECOND = 1000;
-const MILLISECONDS_OF_A_MINUTE = MILLISECONDS_OF_A_SECOND * 60;
-const MILLISECONDS_OF_A_HOUR = MILLISECONDS_OF_A_MINUTE * 60;
-const MILLISECONDS_OF_A_DAY = MILLISECONDS_OF_A_HOUR * 24;
+import * as articles from "./articles.js";
+import * as bids from "./bids.js";
+import { updateCountdown, MILLISECONDS_OF_A_SECOND } from "./chrono.js";
 
 var currentBid;
 var nextBid = currentBid + currentBid * 0.1;
@@ -20,7 +11,7 @@ const btn2 = document.getElementById("btn2");
 const btn3 = document.getElementById("btn3");
 const btnDirectBid = document.getElementById("direct-bid-btn");
 const inputBid = document.getElementById("direct-input");
-//const bodyTableBids = document.getElementById("table-bids-body");
+
 const alert = document.getElementById("alert");
 const confirmPanel = document.getElementById("confirm");
 const confirmBtn = document.getElementById("confirmbtn");
@@ -30,52 +21,107 @@ const loading = document.getElementById("loading");
 const h3 = document.getElementById("name-article");
 const img = document.getElementById("img");
 const description = document.getElementById("description");
-const btnPrev = document.getElementById("btn-prev");
-const btnNext = document.getElementById("btn-next");
 const btnPurchase = document.getElementById("btn-purchase");
 
-const le = 37;
-const up = 38;
-const ri = 39;
-const down = 40;
-
+const TABLE_BIDS = document.getElementById("table-bids-body");
+const ARTICLEID = window.location.search.substr(4);
+const BID_HOST = "http://localhost:9900/products/";
 const HOST = "http://localhost:9900/products/";
+const BIDS_DIRECTION = BID_HOST + ARTICLEID + "/bids";
+let DIRECTION = HOST + ARTICLEID;
 
+productRequest();
 
-let articleId = window.location.search.substr(4);
-
-bids.bidsRequest();
-console.log(bids.current);
-request();
-
-
-var requestOptions = {
-  method: "GET",
-  redirect: "follow",
-};
-
-function request() {
-  let direction = HOST + articleId;
-
-  fetch(direction, requestOptions)
-
+function productRequest() {
+  var requestOptions = {
+    method: "GET",
+    redirect: "follow",
+  };
+  fetch(DIRECTION, requestOptions)
     .then((response) => response.json())
     .then((data) => {
+      const DATETIME = new Date(data["datetime"]);
       showArticle(data);
-      //getStorage();
-      //getList();
+      bidsRequest();
       setCurrentBid();
       loading.style.display = "none";
-      buttonsClick();
-      keysChange();
-
-      updateCountdown();
+      updateCountdown(DATETIME);
       setInterval(updateCountdown, MILLISECONDS_OF_A_SECOND);
       clickFastBid();
       directBid();
-      
     });
 }
+
+function bidsRequest() {
+  var requestOptions = {
+    method: "GET",
+    redirect: "follow",
+  };
+  fetch(BIDS_DIRECTION, requestOptions)
+    .then((response) => response.json())
+    .then((data) => {
+      getBids(data);
+    })
+    .catch((error) => console.log("error", error));
+}
+
+async function bid(currentBid) {
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  var raw = JSON.stringify({
+    productId: `${ARTICLEID}`,
+    currentBid: `${currentBid}`,
+  });
+  var requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow",
+  };
+  let response = await fetch(BIDS_DIRECTION, requestOptions);
+  if (response.ok) {
+    let json = await response.json();
+    location.reload();
+  } else {
+    alert("Error-HTTP: " + response.status);
+  }
+}
+
+function getBids(data) {
+  TABLE_BIDS.innerHTML = "";
+  for (var i = data.length; i > 0; i--) {   //No muestro la primera puja porque es la que se crea por defecto al crear producto
+    var bid = data[i];
+    if (typeof bid === "object") {
+      var tdUser = document.createElement("td");
+      let tdBid = document.createElement("td");
+      let tdTime = document.createElement("td");
+
+      tdUser.textContent = "User";
+      tdBid.textContent = bid["currentBid"];
+      tdTime.textContent = bid["datetime"];
+
+      let row = document.createElement("tr");
+      row.appendChild(tdUser);
+      row.appendChild(tdBid);
+      row.appendChild(tdTime);
+      TABLE_BIDS.appendChild(row);
+
+      currentBid = bid["currentBid"];
+      getCurrentBid(data);
+    }
+  }
+}
+
+function getCurrentBid(data) {
+  for (var i = 1; i <= data.length; i++) {
+    var bid = data[i];
+    if (typeof bid === "object") {
+      currentBid = bid["currentBid"];
+    }
+  }
+  setCurrentBid();
+}
+
 function showArticle(data) {
   h3.textContent = data.name;
   img.src = data.image;
@@ -88,7 +134,9 @@ function showArticle(data) {
 
 function directPurchase(data) {
   var price = Math.ceil(data.price / 14);
-  var purchasePrice = Math.ceil(parseFloat(data.price) + parseFloat(data.price * 0.14));
+  var purchasePrice = Math.ceil(
+    parseFloat(data.price) + parseFloat(data.price * 0.14)
+  );
   btnPurchase.textContent = `Compra por:\n ${purchasePrice}€`;
   currentBid = price;
   if (currentBid >= data.price) {
@@ -122,76 +170,10 @@ function fastBid(button) {
   confirm();
 }
 
-let counterStorage = 1;
-
-// function updateList() {
-//   let date = new Date().toLocaleDateString();
-//   let time = new Date().toLocaleTimeString();
-
-//   recordStorage = {
-//     user: "user",
-//     bid: currentBid,
-//     time: time,
-//     date: date,
-//   };
-//   localStorage.setItem(id + "" + counterStorage, JSON.stringify(recordStorage));
-//   counterStorage++;
-//   alert.classList.add("d-none");
-//   getList();
-//   //setCurrentBid();
-// }
-
-// function getList() {
-//   bodyTableBids.innerHTML = "";
-//   for (var i = localStorage.length; i >= 0; i--) {
-//     let key = id + "" + i;
-//     var local = JSON.parse(localStorage.getItem(key));
-//     if (local != null) {
-//       var tdUser = document.createElement("td");
-//       let tdBid = document.createElement("td");
-//       let tdTime = document.createElement("td");
- 
-//       tdUser.textContent = local["user"];
-//       tdBid.textContent = local["bid"];
-//       tdTime.textContent = local["time"];
-     
-//       let row = document.createElement("tr");
-//       row.appendChild(tdUser);
-//       row.appendChild(tdBid);
-//       row.appendChild(tdTime);
-     
-//       bodyTableBids.appendChild(row);
-//     }
-//   }
-// }
-
-function getStorage() {
-  for (var i = 1; i <= localStorage.length; i++) {
-    let key = id + "" + i;
-    var local = JSON.parse(localStorage.getItem(key));
-    if (local != null) {
-      currentBid = local["bid"];
-    }
-  }
-}
-
 function directBid() {
-  keysInput();
+  //keysInput();
   btnDirectBid.onclick = () => {
     validate();
-  };
-}
-
-function keysInput() {
-  inputBid.onclick = () => {
-    document.onkeydown = (tecla) => {
-      var keyPress = tecla.keyCode;
-      if (keyPress == up) {
-        inputBid.value++;
-      } else if (keyPress == down) {
-        inputBid.value--;
-      }
-    };
   };
 }
 
@@ -241,13 +223,55 @@ function clickCancel() {
 function clickConfirm() {
   confirmBtn.onclick = () => {
     confirmPanel.style.display = "none";
-    setCurrentBid();
-    bids.bid(currentBid);
-    bids.bidsRequest();
+    //setCurrentBid();
+    bid(currentBid);
   };
 }
 
-function buttonsClick(articles) {
+
+
+// function updateList() {
+//   let date = new Date().toLocaleDateString();
+//   let time = new Date().toLocaleTimeString();
+
+//   recordStorage = {
+//     user: "user",
+//     bid: currentBid,
+//     time: time,
+//     date: date,
+//   };
+//   localStorage.setItem(id + "" + counterStorage, JSON.stringify(recordStorage));
+//   counterStorage++;
+//   alert.classList.add("d-none");
+//   getList();
+//   //setCurrentBid();
+// }
+
+// function getList() {
+//   bodyTableBids.innerHTML = "";
+//   for (var i = localStorage.length; i >= 0; i--) {
+//     let key = id + "" + i;
+//     var local = JSON.parse(localStorage.getItem(key));
+//     if (local != null) {
+//       var tdUser = document.createElement("td");
+//       let tdBid = document.createElement("td");
+//       let tdTime = document.createElement("td");
+
+//       tdUser.textContent = local["user"];
+//       tdBid.textContent = local["bid"];
+//       tdTime.textContent = local["time"];
+
+//       let row = document.createElement("tr");
+//       row.appendChild(tdUser);
+//       row.appendChild(tdBid);
+//       row.appendChild(tdTime);
+
+//       bodyTableBids.appendChild(row);
+//     }
+//   }
+// }
+
+/* function buttonsClick(articles) {
   var articles = articles;
 
   btnPrev.onclick = () => {
@@ -272,7 +296,7 @@ function left() {
     id--;
     request();
   }
-}
+} 
 
 function keysChange() {
   document.onkeydown = (key) => {
@@ -284,23 +308,27 @@ function keysChange() {
     }
   };
 }
+*/
 
-function updateCountdown() {
-  const NOW = new Date();
-  const DURATION = DATE - NOW;
-  const RESULT_DAYS = Math.floor(DURATION / MILLISECONDS_OF_A_DAY);
-  const RESULT_HOURS = Math.floor(
-    (DURATION % MILLISECONDS_OF_A_DAY) / MILLISECONDS_OF_A_HOUR
-  );
-  const RESULT_MINUTES = Math.floor(
-    (DURATION % MILLISECONDS_OF_A_HOUR) / MILLISECONDS_OF_A_MINUTE
-  );
-  const RESULT_SECONDS = Math.floor(
-    (DURATION % MILLISECONDS_OF_A_MINUTE) / MILLISECONDS_OF_A_SECOND
-  );
+/* function keysInput() {
+  inputBid.onclick = () => {
+    document.onkeydown = (tecla) => {
+      var keyPress = tecla.keyCode;
+      if (keyPress == up) {
+        inputBid.value++;
+      } else if (keyPress == down) {
+        inputBid.value--;
+      }
+    };
+  };
+} */
 
-  DAYS.textContent = RESULT_DAYS;
-  HOURS.textContent = RESULT_HOURS;
-  MINUTES.textContent = RESULT_MINUTES;
-  SECONDS.textContent = RESULT_SECONDS;
-}
+/* function getStorage() {
+  for (var i = 1; i <= localStorage.length; i++) {
+    let key = id + "" + i;
+    var local = JSON.parse(localStorage.getItem(key));
+    if (local != null) {
+      currentBid = local["bid"];
+    }
+  }
+} */

@@ -1,6 +1,6 @@
 import * as product from "./product.js";
 
-const TABLE_BIDS = document.getElementById("table-bids-body");
+/* const TABLE_BIDS = document.getElementById("table-bids-body");
 const ARTICLEID = window.location.search.substr(4);
 const BID_HOST = "http://localhost:9900/products/";
 const DIRECTION = BID_HOST + ARTICLEID + "/bids";
@@ -70,4 +70,4 @@ export function bid(currentBid) {
     .then((result) => console.log(result))
     .catch((error) => console.log("error", error));
     location.reload();
-}
+} */
