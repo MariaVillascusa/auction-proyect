@@ -16,6 +16,8 @@ export function showArticles(data) {
       </div>
     </div>
       `;
+      //Boton redirecciona a la ruta /product con el id del producto
+      
     container.appendChild(CARD);
   }
 }

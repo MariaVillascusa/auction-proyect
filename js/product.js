@@ -24,7 +24,7 @@ const description = document.getElementById("description");
 const btnPurchase = document.getElementById("btn-purchase");
 
 const TABLE_BIDS = document.getElementById("table-bids-body");
-const ARTICLEID = window.location.search.substr(4);
+const ARTICLEID = window.location.search.substr(4); // Obtendo el id del producto para poder realizar la peticion GET
 const BID_HOST = "http://localhost:9900/products/";
 const HOST = "http://localhost:9900/products/";
 const BIDS_DIRECTION = BID_HOST + ARTICLEID + "/bids";

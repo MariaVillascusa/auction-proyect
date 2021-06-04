@@ -8,7 +8,7 @@
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="css/index-styles.css">
+  <link rel="stylesheet" href="css/login.css">
   <title>SUBASTAS WEB</title>
 </head>
 
@@ -30,34 +30,31 @@
     <a class="nav-link" id="link" href="#">Sobre nosotros</a>
     <a class="nav-link" id="link" href="register.html">Regístrate</a>
     <a class="nav-link" id="link" href="login.html">Log in</a>
-    
+
   </nav>
   <div class="alert alert-danger d-none" role="alert" id="alert"></div>
 
-  <div id="confirm" class="modal">
-    <span onclick="document.getElementById('confirm').style.display='none'" class="close"
-      title="Close Modal">&times;</span>
-    <form class="modal-content" action="#">
-      <div class="container">
-        <h1>Hacer puja</h1>
-        <p>Estás seguro de que quieres pujar por el artículo?</p>
-
-        <div class="clearfix">
-          <button type="button" class="bttn cancelbtn" id="cancelbtn">Cancelar</button>
-          <button type="button" class="bttn confirmbtn" id="confirmbtn">Pujar</button>
-        </div>
-      </div>
-    </form>
-  </div>
-
   <div class="container-xxl" id="container">
+    <h1>Inicia sesión</h1>
+    <div class="row g-3 align-items-center" id="login">
+      <form id="form" action="http://localhost:9900/users" method="POST">
 
-    
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input type="text" class="form-control" id="username" name="username">
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" name="password">
+        </div>
+
+        <button type="button" class="btn bttn" id="btn">Enviar</button>
+      </form>
+    </div>
   </div>
-      <!-- Bootstrap Bundle with Popper -->
+
+  <!-- Bootstrap Bundle with Popper -->
   <script src="bootstrap/js/bootstrap.min.js"></script>
-  <script type="module" src="js/chrono.js"></script>
-  <script type="module" src="js/index.js"></script>
-  <script type="module" src="js/articles.js"></script>
+  <script type="module" src="js/login.js"></script>
 
 </body>
